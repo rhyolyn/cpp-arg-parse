@@ -1,0 +1,50 @@
+# Build directories
+/build/
+/meson-private/
+/meson-logs/
+
+# Compiled object files, libraries, executables
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+
+# Editor and OS files
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Visual Studio Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+*.pdb
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+*.vs/
+
+# Meson
+meson-logs/
+meson-private/
+build/
+install/
+subprojects/googletest*
+subprojects/packagecache
+subprojects/.wraplock
+
+#python
+**/__pycache__/
