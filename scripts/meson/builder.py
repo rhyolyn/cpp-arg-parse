@@ -33,20 +33,6 @@ class MesonBuilder(ABC):
         os.makedirs(self._build_dir, exist_ok=True)
         self._commands: Dict[MesonBuilder.Command, List[str]] = self._build_command_dict()
 
-    def _get_default_build_dir(self) -> str:
-        return os.path.join(self._project_root, self.DEFAULT_BUILD_DIR)
-
-    def _get_default_install_dir(self) -> str:
-        return os.path.join(self._project_root, self.DEFAULT_INSTALL_DIR)
-
-    def _build_command_dict(self) -> Dict['MesonBuilder.Command', List[str]]:
-        return {
-            self.Command.SETUP: [self.BUILDER, self.Command.SETUP.value, self._build_dir, "--prefix", self._install_dir],
-            self.Command.COMPILE: [self.BUILDER, self.Command.COMPILE.value, "-C", self._build_dir],
-            self.Command.TEST: [self.BUILDER, self.Command.TEST.value, "-C", self._build_dir],
-            self.Command.INSTALL: [self.BUILDER, self.Command.INSTALL.value, "-C", self._build_dir]
-        }
-
     def clean(self) -> None:
         """Remove build and install directories."""
         print(f"Cleaning build directory: {self._build_dir}")
@@ -87,6 +73,20 @@ class MesonBuilder(ABC):
     @abstractmethod
     def _run_commands(self, clean: bool = False) -> None:
         pass
+
+    def _get_default_build_dir(self) -> str:
+        return os.path.join(self._project_root, self.DEFAULT_BUILD_DIR)
+
+    def _get_default_install_dir(self) -> str:
+        return os.path.join(self._project_root, self.DEFAULT_INSTALL_DIR)
+
+    def _build_command_dict(self) -> Dict['MesonBuilder.Command', List[str]]:
+        return {
+            self.Command.SETUP: [self.BUILDER, self.Command.SETUP.value, self._build_dir, "--prefix", self._install_dir],
+            self.Command.COMPILE: [self.BUILDER, self.Command.COMPILE.value, "-C", self._build_dir],
+            self.Command.TEST: [self.BUILDER, self.Command.TEST.value, "-C", self._build_dir, '--verbose'],
+            self.Command.INSTALL: [self.BUILDER, self.Command.INSTALL.value, "-C", self._build_dir]
+        }
 
     def _get_ordered_commands(self) -> List[List[str]]:
         return [self._commands[cmd] for cmd in

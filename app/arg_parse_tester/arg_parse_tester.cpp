@@ -1,6 +1,6 @@
-#include <arg_parse/arg_parse.h>
+#include <arg_parse/argument_parser.h>
 
 int main() {
-    hello();
+    ArgumentParser parser;
     return 0;
 }

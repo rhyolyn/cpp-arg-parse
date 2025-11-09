@@ -4,11 +4,6 @@ from scripts.meson.path_finder import PathFinder
 
 class MesonBuilderWindows(MesonBuilder):
 
-    def _run_commands(self, clean: bool = False) -> None:
-        commands = self._get_ordered_commands()
-        command_strings = [self._get_command_string(command) for command in commands]
-        PathFinder.run_in_vs_env(command_strings)
-
     def setup(self) -> None:
         command_string = self._get_command_string(self._commands[self.Command.SETUP])
         PathFinder.run_in_vs_env([command_string])
@@ -24,3 +19,9 @@ class MesonBuilderWindows(MesonBuilder):
     def install(self) -> None:
         command_string = self._get_command_string(self._commands[self.Command.INSTALL])
         PathFinder.run_in_vs_env([command_string])
+
+    def _run_commands(self, clean: bool = False) -> None:
+        # self._commands[self.Command.SETUP].append('--backend=vs') 
+        commands = self._get_ordered_commands()
+        command_strings = [self._get_command_string(command) for command in commands]
+        PathFinder.run_in_vs_env(command_strings)
