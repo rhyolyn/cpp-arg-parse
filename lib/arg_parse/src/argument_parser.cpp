@@ -18,3 +18,4 @@ void ArgumentParser::add_argument(const Argument& arg)
     arguments.push_back(arg);
 }
 
+

@@ -1,7 +1,9 @@
 arg_parse_inc = include_directories('include')
 
 arg_parse_srcs = [
+  'src/argument.cpp',
   'src/argument_parser.cpp',
+  'src/minimal_parser.cpp'
 ]
 
 arg_parse_lib = library('arg_parse',
