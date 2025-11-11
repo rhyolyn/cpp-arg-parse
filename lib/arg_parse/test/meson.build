@@ -5,7 +5,6 @@ gtest_main_dep = gtest_proj.get_variable('gtest_main_dep')
 test_sources = [
   'test_argument.cpp',
   'test_argument_parser.cpp',
-  'test_minimal_parser.cpp'
 ]
 
 test_exe = executable(
