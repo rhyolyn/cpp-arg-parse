@@ -1,42 +1,53 @@
 #pragma once
 #include <string>
+#include <string_view>
 #include <algorithm>
+#include <cctype>
+#include <stdexcept>
 
-#include <common/api.h>
-
-class API Argument
-{
+class Argument {
 public:
-    static constexpr const char* DASH_DASH = "--";
-    static constexpr size_t DASH_DASH_LENGTH = 2;
-    static constexpr char DASH = '-';
-    static constexpr char UNDERSCORE = '_';
+    static constexpr std::string_view ILLEGAL_CHARS = " -.,!@#$%&*()[]{}+=|\\:;\"'<>?/~`";
+    static constexpr char REPLACEMENT_CHAR = '_';
 
-    Argument(const std::string& name,
-        const std::string& description,
-        unsigned num_options,
-        bool required)
-        : description(description), num_options(num_options), required(required)
-    {
-        this->set_name(name);
+    explicit Argument(const std::string& name) : name(name) {
+        canonicalize_name();
     }
 
-    // Getters
-    const std::string& get_name() const { return name; }
-    const std::string& get_description() const { return description; }
-    unsigned get_num_options() const { return num_options; }
-    bool is_required() const { return required; }
+    std::string get_name() const {
+        return name;
+    }
 
-    // Setters
-    void set_name(const std::string& new_name);
+protected:
+    void canonicalize_name() {
+        std::string original_name = name;  // Save for error message
+        replace_illegal_characters();
+        strip_leading_non_alphas();
+        throw_if_empty(original_name);
+    }
 
-    // Helpers
-    static void remove_leading_dashes(std::string& str);
-    static void replace_all_dashes_with_underscores(std::string& str);
+    void replace_illegal_characters() {
+        for (char illegal : ILLEGAL_CHARS) {
+            std::replace(name.begin(), name.end(), illegal, REPLACEMENT_CHAR);
+        }
+    }
+
+    void strip_leading_non_alphas() {
+        auto it = std::find_if(name.begin(), name.end(), [](unsigned char c) {
+            return std::isalpha(c);
+        });
+        name.erase(name.begin(), it);
+    }
+
+    void throw_if_empty(const std::string& original_name) const {
+        if (name.empty()) {
+            throw std::invalid_argument(
+                "Argument name cannot be empty after canonicalization. Original name: '" +
+                original_name + "'"
+            );
+        }
+    }
 
 private:
     std::string name;
-    std::string description;
-    unsigned num_options;
-    bool required;
 };

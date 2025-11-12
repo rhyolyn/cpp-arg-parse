@@ -1,7 +1,6 @@
 arg_parse_inc = include_directories('include')
 
 arg_parse_srcs = [
-  'src/argument.cpp',
   'src/argument_parser.cpp',
 ]
 
